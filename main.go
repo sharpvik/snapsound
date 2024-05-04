@@ -12,7 +12,7 @@ var (
 		Name:     "snapsound",
 		Version:  "0.1.0",
 		Usage:    "Play pixels",
-		Commands: []*cli.Command{&snap, &revert},
+		Commands: []*cli.Command{&snap, &sound, &play},
 	}
 
 	snap = cli.Command{
@@ -23,12 +23,20 @@ var (
 		Action:    snapAction,
 	}
 
-	revert = cli.Command{
-		Name:      "revert",
-		Usage:     "Revert to original",
+	sound = cli.Command{
+		Name:      "sound",
+		Usage:     "Make it yours",
 		Args:      true,
 		ArgsUsage: "<SOURCE>",
-		Action:    revertAction,
+		Action:    soundAction,
+	}
+
+	play = cli.Command{
+		Name:      "play",
+		Usage:     "Play it now",
+		Args:      true,
+		ArgsUsage: "<SOURCE>",
+		Action:    playAction,
 	}
 )
 
@@ -41,20 +49,22 @@ func snapAction(ctx *cli.Context) error {
 	return saveImage(trimExtension(name)+".png", encodeBytesAsImage(bytes))
 }
 
-func revertAction(ctx *cli.Context) error {
+func soundAction(ctx *cli.Context) error {
 	name := ctx.Args().First()
-	file, err := os.Open(name)
+	bytes, err := originalBytesFromFile(name)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-
-	bytes, err := originalBytes(file)
-	if err != nil {
-		return err
-	}
-
 	return saveFile(trimExtension(name)+" (Reverted).mp3", bytes)
+}
+
+func playAction(ctx *cli.Context) error {
+	name := ctx.Args().First()
+	bytes, err := originalBytesFromFile(name)
+	if err != nil {
+		return err
+	}
+	return playBytes(bytes)
 }
 
 func main() {

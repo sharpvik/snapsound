@@ -26,6 +26,15 @@ func encodeBytesAsImage(bytes []byte) *image.RGBA {
 	return img
 }
 
+func originalBytesFromFile(name string) (bs []byte, err error) {
+	file, err := os.Open(name)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	return originalBytes(file)
+}
+
 func originalBytes(r io.Reader) (bs []byte, err error) {
 	img, err := png.Decode(r)
 	if err != nil {
