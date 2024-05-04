@@ -6,13 +6,11 @@ import (
 	"image"
 	"image/png"
 	"io"
-	"log"
 	"math"
 	"os"
 )
 
 func encodeBytesAsImage(bytes []byte) *image.RGBA {
-	log.Println("ORIG LEN:", len(bytes))
 	binLength := make([]byte, 8)
 	binary.BigEndian.PutUint64(binLength, uint64(len(bytes)))
 	bytes = append(binLength, bytes...)
@@ -20,7 +18,6 @@ func encodeBytesAsImage(bytes []byte) *image.RGBA {
 	sideLength := int(math.Ceil(math.Sqrt(float64(len(bytes)) / 4)))
 
 	img := image.NewRGBA(image.Rect(0, 0, sideLength, sideLength))
-	log.Println("LEN+MP3 LEN:", len(bytes))
 	copy(img.Pix, bytes)
 
 	return img
@@ -47,7 +44,6 @@ func originalBytes(r io.Reader) (bs []byte, err error) {
 	}
 
 	originalLength := binary.BigEndian.Uint64(nrgba.Pix[:8])
-	log.Println("ORIG LEN:", originalLength)
 	return nrgba.Pix[8 : originalLength+8], nil
 }
 

@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"io"
-	"log"
 	"time"
 
 	"github.com/gopxl/beep"
@@ -14,7 +13,7 @@ import (
 func playBytes(bs []byte) error {
 	streamer, format, err := mp3.Decode(io.NopCloser(bytes.NewReader(bs)))
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer streamer.Close()
 
