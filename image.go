@@ -26,7 +26,7 @@ func encodeBytesAsImage(bytes []byte) *image.RGBA {
 	return img
 }
 
-func revertToOriginal(r io.Reader) (bs []byte, err error) {
+func originalBytes(r io.Reader) (bs []byte, err error) {
 	img, err := png.Decode(r)
 	if err != nil {
 		return nil, err

@@ -3,6 +3,7 @@ package main
 import (
 	"io"
 	"os"
+	"path/filepath"
 )
 
 func readFile(name string) ([]byte, error) {
@@ -22,4 +23,8 @@ func saveFile(name string, bytes []byte) error {
 	defer file.Close()
 	_, err = file.Write(bytes)
 	return err
+}
+
+func trimExtension(name string) string {
+	return name[:len(name)-len(filepath.Ext(name))]
 }

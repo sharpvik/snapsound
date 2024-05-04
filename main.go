@@ -38,7 +38,7 @@ func snapAction(ctx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	return saveImage("example.png", encodeBytesAsImage(bytes))
+	return saveImage(trimExtension(name)+".png", encodeBytesAsImage(bytes))
 }
 
 func revertAction(ctx *cli.Context) error {
@@ -49,12 +49,12 @@ func revertAction(ctx *cli.Context) error {
 	}
 	defer file.Close()
 
-	bytes, err := revertToOriginal(file)
+	bytes, err := originalBytes(file)
 	if err != nil {
 		return err
 	}
 
-	return saveFile("reverted.mp3", bytes)
+	return saveFile(trimExtension(name)+" (Reverted).mp3", bytes)
 }
 
 func main() {
